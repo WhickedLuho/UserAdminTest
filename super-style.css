@@ -53,5 +53,16 @@ body{
   height: auto;
 }
 input.btn.btn-dark.modibutton{
-  width: 100%;
+  width: 40%;
+  margin-top: 25px;
+}
+.linkBack{
+  margin-top: 25px;
+  float: right;
+
+  width: 49%;
+  height: 80%;
+  padding: 12px;
+  font-size: 100%;
+  font-weight: normal;
 }

@@ -104,35 +104,53 @@ echo"<table class='table table-dark'>
 echo"</tbody>
     </table>";
 
+    if (empty($avatar)) {
+      $avatar = $avatardb;
+    }
+
+    if (empty($password)) {
+      $password = $pwdb;
+    }
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       
       //var_dump($_POST);
       if (isset($_FILES['image'])) {
         require('imgupload.php');
 
-        $file_name  =  str_replace(' ', '_',$_FILES['image']['name']);
-        $file_name_char_clean = preg_replace( '/[^a-z0-9 !_]/i', '', $file_name);
-        $file_desti =  "uploads/" ;
-        $tmp = explode('.', $file_name);
-        $file_extension = end($tmp);
-        $full_file_name = str_replace($file_extension, "", $file_name_char_clean);
-        $file_NameClean = $full_file_name . '.' .$file_extension;
-        $file_size = $_FILES['image']['size'];
-        $extensions= array("jpeg","jpg","png");
+          $file_name  =  str_replace(' ', '_',$_FILES['image']['name']);
+          $file_name_char_clean = preg_replace( '/[^a-z0-9 !_]/i', '', $file_name);
+          $file_desti =  "uploads/" ;
+          $tmp = explode('.', $file_name);
+          $file_extension = end($tmp);
+          $full_file_name = str_replace($file_extension, "", $file_name_char_clean);
+          $file_NameClean = $full_file_name . '.' .$file_extension;
+          $file_size = $_FILES['image']['size'];
+          $extensions= array("jpeg","jpg","png");
 
-   $file = array(array(
-         'name'      =>    $file_NameClean,
-         'extension' =>    $file_extension,
-         'size'      =>    $file_size   ));
+            $file = array(array(
+                  'name'      =>    $file_NameClean,
+                  'extension' =>    $file_extension,
+                  'size'      =>    $file_size   ));
 
-   $settings   =  array(array(
-         'allowed_extension'  =>    $extensions,
-         'max_file_size'      =>    2097152  ));
+            $settings   =  array(array(
+                  'allowed_extension'  =>    $extensions,
+                  'max_file_size'      =>    153600  ));
 
-      $imgStatus = array();
-      $imgStatus = uploadFile($file, $file_desti, $settings);
-      var_dump($imgStatus);
+          $imgStatus = array();
+          $imgStatus = uploadFile($file, $file_desti, $settings);
+
+          if(empty($imgStatus[1]['name'])){
+              $imgStatus[0]['status'] = "";
+              $imgStatus[0]['msg']    = "no file choosed";
+              $avatar = $avatardb;
+            }else{
+              $avatar = $imgStatus[1]['name'];
+            }
       }
+
+
+
 
       if (empty($_POST["username"])) {
           $username0 = $usernamedb;
@@ -209,8 +227,7 @@ echo"</tbody>
       } else {
         $address = test_input($_POST["address"]);
       }
-     
-      
+
       $usernameclean = ltrim($username0);
       $usernameclean = rtrim($usernameclean);
 
@@ -228,7 +245,8 @@ echo"</tbody>
       
         include('db_config.php');
 
-        $sql = "UPDATE `users` SET `name` = '$name' , `email` = '$email', `username` ='$usernameclean', `password` = '$password', `active` = '$active', 
+        $sql = "UPDATE `users` SET `name` = '$name' , `email` = '$email', `username` ='$usernameclean', `password` = '$password',
+          `avatar` = '$avatar', `active` = '$active', 
           `permission` = '$permission', `country`  = '$country', `pcode` = '$pcode',  `city`  = '$city', `address`  = '$address'   
           WHERE `id` = '$member'";
           var_dump($result = $connection->query($sql));
@@ -237,6 +255,7 @@ echo"</tbody>
            var_dump( $connection->error);
             exit;
         }
+        $connection->close();
       }else{
         var_dump($usernameErr,$nameErr,$emailErr,$passwordErr,$activeErr);
         var_dump($password);
@@ -249,7 +268,6 @@ echo"</tbody>
       $data = htmlspecialchars($data);
       return $data;
       }
-
 
 ?>
 
@@ -568,11 +586,11 @@ echo"</tbody>
       <input type="text" class="form-control" name="address" value="" placeholder=<?php echo $address;?>>
       <br><br>
 
-      <label >Upload avatar</label>
+      <label >Upload avatar: \\ <?php echo $avatar;?></label>
       <div class="input-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" name = "image" id="inputGroupFile04" placeholder="cucc">
-          <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+          <input type="file" class="custom-file-input" name = "image" id="inputGroupFile04" >
+          <label class="custom-file-label" for="inputGroupFile04"></label>
         </div>
       </div>
       <br><br>
@@ -580,10 +598,10 @@ echo"</tbody>
       <div class="text-center">
         <img src="profile.png" class="rounded" alt="...">
       </div>
-     
     </div>  
   </div>
   <input type="submit" name="submit" class="btn btn-dark modibutton" value="Submit"> 
+  <a href="index.php" class="badge badge-dark linkBack">Back</a>
 </form>
 </body>
 </html>
