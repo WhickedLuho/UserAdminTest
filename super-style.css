@@ -1,0 +1,57 @@
+body{
+/*
+  background-image: url('./bg.jpg');
+ color: white;*/
+ font-family: 'Roboto', sans-serif;
+
+}
+
+.counter{
+  width: 5px;
+  padding : 0px;
+  margin: 0px;
+}
+.checkbox0{
+  width: 2px;
+  padding : 0px;
+  margin: 0px;
+}
+.table-dark {
+    color: #fff;
+    background-color: #000c18;
+}
+.roles{
+  font-weight: 650;
+}
+.lilIcons{
+  width: 24px;
+  height: auto;
+  padding : 0px;
+  margin : 0px;
+}
+.buttonOption{
+  padding : 12px !important;
+  margin : 0px;
+}
+.custominputfield{
+  width: 21%;
+  margin: 0px;
+  margin-left: 78%;
+  margin-top: 10px;
+
+}
+.customOption{
+  margin: 0px;
+  width: 18%;
+  margin-left: 1%;
+ 
+}
+.testButton{
+  background-image: url('./update_white_96x96.png');
+  background-color: #fff;
+  width: 10%;
+  height: auto;
+}
+input.btn.btn-dark.modibutton{
+  width: 100%;
+}
