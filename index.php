@@ -6,6 +6,7 @@ header('Content-Type: text/html; charset=utf-8');
 date_default_timezone_set('Europe/Belgrade');
 
 session_start();
+session_unset();
 
 ?>
 <!DOCTYPE HTML>  
@@ -19,16 +20,15 @@ session_start();
 <link rel="stylesheet" type="text/css" href="super-style.css">
 </head>
 <body>
-<form method="post" action="delete.php" class="customForm">
+<form method="post" action="delete.php" class="form-group customFormModi">
 <div class="form-group">
-<div class="input-group mb-3 custominputfield">
-  <input type="text" class="form-control"  aria-label="" aria-describedby="basic-addon2">
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="button">Button</button>
-    <button type="button" class="btn btn-dark">Dark</button>
-  </div>
-</div>
 <?php 
+
+if (isset($_POST)) {
+  var_dump($_POST);
+}else{
+//var_dump($_POST['search']);
+}
 
 
 
@@ -46,6 +46,9 @@ echo"<table class='listtable table table-dark '>
       <tbody>";
 
         include('db_config.php');
+
+
+
         $sql = "SELECT * from users";
         if (!$result = $connection->query($sql)) {
             echo "Sorry, the website is experiencing problems.";
@@ -85,14 +88,10 @@ echo"</tbody>
 
 ?>
 <div class="input-group customOption">
-  <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-    <option selected name = 'option'>Choose...</option>
-    <option value="1">Delete</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
-  </select>
+
   <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="submit" value="Submit" name="submit">Button</button>
+      <input type="text" class="form-control" name="search">
+    <button class="btn btn-outline-secondary" type="submit" value="Submit" name="submit">Search</button>
   </div>
 </div>
 </div>

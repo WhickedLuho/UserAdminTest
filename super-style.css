@@ -3,7 +3,6 @@ body{
   background-image: url('./bg.jpg');
  color: white;*/
  font-family: 'Roboto', sans-serif;
-
 }
 
 .counter{
@@ -65,4 +64,15 @@ input.btn.btn-dark.modibutton{
   padding: 12px;
   font-size: 100%;
   font-weight: normal;
+}
+img.rounded.profImg{
+  width: 200px;
+  height: auto;
+}
+form.form-group.customFormModi{
+  width: 80%;
+
+  margin-left: 10%;
+  margin: auto;
+  margin-top: 50px;
 }

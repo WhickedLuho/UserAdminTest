@@ -7,9 +7,7 @@ date_default_timezone_set('Europe/Belgrade');
 
 
 session_start();
-var_dump($_POST['check_list']);
 
-var_dump( $_GET['member']);
 $counter = array();
 $member = "";
 
@@ -46,8 +44,10 @@ if(!empty($_POST['check_list'])){
 
 }
 
+
+
 mysqli_close($connection);
-session_unset();
+
 header("Location: index.php");
 ?>
 

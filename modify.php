@@ -36,10 +36,10 @@ $member = $_SESSION["member"];
 
 $usernameErr = $nameErr = $emailErr = $passwordErr = $cpasswordErr = $activeErr =  "";
 $username0 = $name = $email = $password = $cpassword = $active = $permission = $country = $pcode = $city = $address = $avatar = "";
-$usernamedb = $namedb = $emaildb = $pwdb = $activedb = $roledb = $countrydb = $pcodedb = $citydb = $addressdb = $avatardb = "";
+$usernamedb = $namedb = $emaildb = $pwdb = $activedb = $roledb = $permissiondb = $countrydb = $pcodedb = $citydb = $addressdb = $avatardb = "";
 
 
-echo"<table class='table table-dark'>
+echo"<table class='table table-dark form-group.customFormModi'>
       <thead>
         <tr>
           <th scope='col'>#</th>
@@ -62,17 +62,18 @@ echo"<table class='table table-dark'>
 
         while ($res = $result->fetch_assoc()) {
 
-          $usernamedb = $res['username'];
-          $namedb     = $res['name'];
-          $emaildb    = $res['email'];
-          $roledb     = $res['roles'];
-          $pwdb       = $res['password'];
-          $avatardb   = $res['avatar'];
-          $activedb   = $res['active'];
-          $countrydb  = $res['country'];
-          $pcodedb    = $res['pcode'];
-          $citydb     = $res['city'];
-          $addressdb  = $res['address'];
+          $usernamedb   = $res['username'];
+          $namedb       = $res['name'];
+          $emaildb      = $res['email'];
+          $roledb       = $res['roles'];
+          $pwdb         = $res['password'];
+          $avatardb     = $res['avatar'];
+          $activedb     = $res['active'];
+          $countrydb    = $res['country'];
+          $pcodedb      = $res['pcode'];
+          $citydb       = $res['city'];
+          $addressdb    = $res['address'];
+          $permissiondb = $res['permission'];
 
 
           $_SESSION['pwtmp'] = $res['password'];
@@ -89,10 +90,6 @@ echo"<table class='table table-dark'>
             <td>$res[email]</td>
             <td class='roles'>$res[roles]</td>
             <td class='buttonOption'>
-
-               <a href='delete.php ?member=$res[id]' ><img class='lilIcons' src='delete_white_96x96.png' id='$res[id]'  alt=''></a>
-               <a href='modify.php ?member=$res[id]' ><img class='lilIcons' src='update_white_96x96.png' id='$res[id]'  alt=''></a>
-               
             </td>
           </tr>
           ";
@@ -104,15 +101,8 @@ echo"<table class='table table-dark'>
 echo"</tbody>
     </table>";
 
-    if (empty($avatar)) {
-      $avatar = $avatardb;
-    }
-
-    if (empty($password)) {
-      $password = $pwdb;
-    }
-
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+     // header("Refresh:0");
       
       //var_dump($_POST);
       if (isset($_FILES['image'])) {
@@ -154,7 +144,7 @@ echo"</tbody>
 
       if (empty($_POST["username"])) {
           $username0 = $usernamedb;
-  
+
       } else {
 
         $username0 = test_input($_POST["username"]);
@@ -192,14 +182,17 @@ echo"</tbody>
       }
 
       if (empty($_POST["active"])) {
-        $activeErr = "Active status is required";
+        $active = $activedb;
+        if ($activedb = '') {
+          $activeErr = "Active status is required";
+        }
       } else {
 
         $active = test_input($_POST["active"]);
       }
       
       if (empty($_POST["permission"])) {
-        $permission = "no";
+        $permission = $permissiondb;
       } else {
         $permission = test_input($_POST["permission"]);
       }
@@ -275,7 +268,7 @@ echo"</tbody>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<form class='form-group' method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+<form class='form-group customFormModi' method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
   <div class="row">
     <div class="col">
       <label >Username</label><span class="error">  * <?php echo $usernameErr;?></span>
@@ -299,6 +292,8 @@ echo"</tbody>
       <input type="text" class="form-control" name="cpassword" value="" placeholder=<?php echo $pwdb;?>>
       <br><br>
 
+    <div class="row">
+    <div class="col">
       <label >Active:</label><span class="error"> * <?php echo $activeErr;?></span><br>
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-secondary active">
@@ -307,9 +302,11 @@ echo"</tbody>
         <label class="btn btn-secondary">
           <input type="radio" name="active" id="option2"  <?php if (isset($active) && $active=="no") echo "checked";?> value = "no"> No
         </label>
+        <br>
+        <input type="text" class="form-control" name="" value="<?php echo $activedb;?>" readonly>
       </div>
-      <br><br>
-
+    </div>
+    <div class="col">
         <label >Permission:</label><span class="error"></span><br>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-secondary active">
@@ -321,8 +318,12 @@ echo"</tbody>
         <label class="btn btn-secondary">
           <input type="radio" name="permission" <?php if (isset($delete) && $delete=="delete") echo "checked";?> value="delete">Delete
         </label>
+        <br>
+        <input type="text" class="form-control" name="" value="<?php echo $permissiondb;?>" readonly>
       </div>
-      <br><br>
+    </div>
+    </div>
+  
     </div>
     <div class="col">
       <label for="country">Country</label>      
@@ -575,18 +576,18 @@ echo"</tbody>
       <br><br>
 
       <label >Post code:</label>  
-      <input type="text" class="form-control" name="pcode" value="" placeholder=<?php echo $pcode;?>>
+      <input type="text" class="form-control" name="pcode" value="" placeholder=<?php echo $pcodedb;?>>
       <br><br>
 
       <label >City</label>  
-      <input type="text" class="form-control" name="city" value="" placeholder=<?php echo $city;?>>
+      <input type="text" class="form-control" name="city" value="" placeholder=<?php echo $citydb;?>>
       <br><br>
 
       <label >Address</label>  
-      <input type="text" class="form-control" name="address" value="" placeholder=<?php echo $address;?>>
+      <input type="text" class="form-control" name="address" value="" placeholder=<?php echo $addressdb;?>>
       <br><br>
 
-      <label >Upload avatar: \\ <?php echo $avatar;?></label>
+      <label >Upload avatar: (Max 150kB)  \\   <?php echo $avatardb;?></label>
       <div class="input-group">
         <div class="custom-file">
           <input type="file" class="custom-file-input" name = "image" id="inputGroupFile04" >
@@ -596,7 +597,7 @@ echo"</tbody>
       <br><br>
 
       <div class="text-center">
-        <img src="profile.png" class="rounded" alt="...">
+        <img src="<?php echo 'uploads/' . $avatardb;?>"  class="rounded profImg" alt="...">
       </div>
     </div>  
   </div>
